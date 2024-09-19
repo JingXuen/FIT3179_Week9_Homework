@@ -8,7 +8,18 @@ filtered_df_air_pollutants = df_air_pollutants[(df_air_pollutants['Year'] >= 192
 
 merged_df = pd.merge(filtered_df_population, filtered_df_air_pollutants, on=['Year', 'Entity', 'Code'], how='inner')
 
-merged_df.to_csv('cleaned_population_air_pollutants_1922_2022.csv', index=False)
+pollutants_columns = [
+    'Nitrogen oxide (NOx)', 
+    'Sulphur dioxide (SO₂) emissions', 
+    'Carbon monoxide (CO) emissions', 
+    'Black carbon (BC) emissions', 
+    'Ammonia (NH₃) emissions', 
+    'Non-methane volatile organic compounds (NMVOC) emissions'
+]
 
-print("Common data between population and air pollutants:")
-print(merged_df)
+for pollutant in pollutants_columns:
+    merged_df[f'{pollutant} per population (kg)'] = (merged_df[pollutant] / merged_df['Population (historical)']) * 1000
+
+merged_df.to_csv('pollutants_per_population_1922_2022.csv', index=False)
+
+print(merged_df.head())
