@@ -1,0 +1,36 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Nitrogen oxide (NOx) per population (kg) in 2022",
+  "width": 800,
+  "height": 400,
+  "projection": {"type": "equalEarth"},
+  "data": {
+    "url": "https://raw.githubusercontent.com/JingXuen/FIT3179_Week9_Homework/main/ne_110m.json",
+    "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+  },
+  "transform": [
+    {
+      "lookup": "properties.NAME",
+      "from": {
+        "data": {
+          "url": "https://raw.githubusercontent.com/JingXuen/FIT3179_Week9_Homework/main/data/pollutants_per_population_1922_2022.csv"
+        },
+        "key": "Entity",
+        "fields": ["Nitrogen oxide (NOx) per population (kg)"]
+      }
+    },
+    {"calculate": "datum.Active + 0.1", "as": "Active Cases"}
+  ],
+  "mark": {"type": "geoshape"},
+  "encoding": {
+    "color": {
+      "field": "Nitrogen oxide (NOx) per population (kg)",
+      "type": "quantitative",
+      "scale": {"type": "log"}
+    },
+    "tooltip": [
+      {"field": "properties.NAME", "type": "nominal", "title": "Entity"},
+      {"field": "Nitrogen oxide (NOx) per population (kg)", "type": "quantitative"}
+    ]
+  }
+}
