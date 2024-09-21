@@ -13,25 +13,27 @@ merged_df = pd.merge(filtered_df_population, filtered_df_air_pollutants, on=['Ye
 
 # Replace "United States" with "United States of America" in the 'Entity' column
 merged_df['Entity'] = merged_df['Entity'].replace('United States', 'United States of America')
-
 merged_df['Entity'] = merged_df['Entity'].replace('Congo', 'Democratic Republic of the Congo')
 
-# List of pollutant columns
-pollutants_columns = [
-    'Nitrogen oxide (NOx)', 
+# Calculate Nitrogen oxide (NOx) per population and add new column
+merged_df['Nitrogen oxide (NOx) per population (kg)'] = (merged_df['Nitrogen oxide (NOx)'] / merged_df['Population (historical)']) * 1000
+
+# Remove all other pollutant columns
+columns_to_remove = [
     'Sulphur dioxide (SO₂) emissions', 
     'Carbon monoxide (CO) emissions', 
     'Black carbon (BC) emissions', 
     'Ammonia (NH₃) emissions', 
     'Non-methane volatile organic compounds (NMVOC) emissions'
 ]
+merged_df = merged_df.drop(columns=columns_to_remove)
 
-# Calculate pollutants per population and add new columns
-for pollutant in pollutants_columns:
-    merged_df[f'{pollutant} per population (kg)'] = (merged_df[pollutant] / merged_df['Population (historical)']) * 1000
-
+# Add 'Entity_Year' column for joining purposes
 merged_df['Entity_Year'] = merged_df['Entity'] + '_' + merged_df['Year'].astype(str)
+
+# Save the cleaned data to a new CSV file
 merged_df.to_csv('pollutants_per_population_1922_2022.csv', index=False)
 
 # Print the first few rows of the resulting dataframe
 print(merged_df.head())
+
