@@ -28,7 +28,7 @@ pollutants_columns = [
 for pollutant in pollutants_columns:
     merged_df[f'{pollutant} per population (kg)'] = (merged_df[pollutant] / merged_df['Population (historical)']) * 1000
 
-# Save the modified dataframe to a new CSV file
+merged_df['Entity_Year'] = merged_df['Entity'] + '_' + merged_df['Year'].astype(str)
 merged_df.to_csv('pollutants_per_population_1922_2022.csv', index=False)
 
 # Print the first few rows of the resulting dataframe
