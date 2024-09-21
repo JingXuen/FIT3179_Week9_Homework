@@ -74,7 +74,7 @@
           "lookup": "Entity_Year",
           "from": {
             "data": {
-              "url": "https://raw.githubusercontent.com/JingXuen/FIT3179_Week9_Homework/refs/heads/main/pollutants_per_population_1922_2022.csv"
+              "url": "https://raw.githubusercontent.com/JingXuen/FIT3179_Week9_Homework/refs/heads/main/data/pollutants_per_population_1922_2022.csv"
             },
             "key": "Entity_Year",
             "fields": ["Nitrogen oxide (NOx)", "Population (historical)"]
