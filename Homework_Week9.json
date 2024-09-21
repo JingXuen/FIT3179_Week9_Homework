@@ -1,0 +1,107 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Nitrogen oxide (NOx) Emission per population (kg) by Year",
+  "width": 800,
+  "height": 400,
+  "projection": {"type": "equalEarth"},
+  "data": {
+    "url": "https://raw.githubusercontent.com/JingXuen/FIT3179_Week9_Homework/main/ne_110m.json",
+    "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}
+  },
+  "params": [
+    {
+    "name": "year_selection",
+        "bind": {
+          "input": "select",
+          "options": [
+            1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930,
+            1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939,
+            1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948,
+            1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957,
+            1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966,
+            1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975,
+            1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984,
+            1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993,
+            1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+            2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011,
+            2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
+            2021, 2022
+          ],
+          "name": "Year Selection: ",
+          "labels": [
+            "1922", "1923", "1924", "1925", "1926", "1927", "1928", "1929", "1930",
+            "1931", "1932", "1933", "1934", "1935", "1936", "1937", "1938", "1939",
+            "1940", "1941", "1942", "1943", "1944", "1945", "1946", "1947", "1948",
+            "1949", "1950", "1951", "1952", "1953", "1954", "1955", "1956", "1957",
+            "1958", "1959", "1960", "1961", "1962", "1963", "1964", "1965", "1966",
+            "1967", "1968", "1969", "1970", "1971", "1972", "1973", "1974", "1975",
+            "1976", "1977", "1978", "1979", "1980", "1981", "1982", "1983", "1984",
+            "1985", "1986", "1987", "1988", "1989", "1990", "1991", "1992", "1993",
+            "1994", "1995", "1996", "1997", "1998", "1999", "2000", "2001", "2002",
+            "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011",
+            "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020",
+            "2021", "2022"
+          ]
+        },
+        "value": 2022
+    }
+  ],
+  "layer": [
+    {
+      "transform": [
+        {
+          "calculate": "'Data is not available in ' + datum.properties.NAME",
+          "as": "note"
+        }
+      ],
+      "mark": {"type": "geoshape", "fill": "lightgray", "stroke": "white"},
+      "encoding": {"tooltip": {"field": "note"}}
+    },
+    {
+      "data": {
+        "url": "https://raw.githubusercontent.com/JingXuen/FIT3179_Week9_Homework/main/ne_110m.json",
+        "format": {"type": "topojson", "feature": "ne_110m_graticules_30"}
+      },
+      "mark": {"type": "geoshape", "fill": null, "stroke": "lightgray"}
+    },
+    {
+      "transform": [
+        {
+          "calculate": "datum.properties.NAME + '_' + year_selection",
+          "as": "Entity_Year"
+        },
+        { 
+          "lookup": "Entity_Year",
+          "from": {
+            "data": {
+              "url": "https://raw.githubusercontent.com/JingXuen/FIT3179_Week9_Homework/refs/heads/main/pollutants_per_population_1922_2022.csv"
+            },
+            "key": "Entity_Year",
+            "fields": ["Nitrogen oxide (NOx)", "Population (historical)"]
+            }
+        },
+        {"calculate": "datum['Nitrogen oxide (NOx)'] / datum['Population (historical)'] * 1000", "as": "Nitrogen oxide (NOx) Emission per population (kg)"}
+      ],
+      "mark": {"type": "geoshape", "stroke": "white"},
+      "encoding": {
+        "color": {
+          "field": "Nitrogen oxide (NOx) Emission per population (kg)",
+          "type": "quantitative",
+          "scale": {"type": "threshold",
+            "domain": [10, 20, 30, 40, 50],
+            "range": ["#fef0d9", "#fdd49e", "#fdbb84", "#fc8d59", "#e34a33", "#b30000"]
+          }
+        },
+        "tooltip": [
+          {"field": "properties.NAME", "type": "nominal", "title": "Country"},
+          {"field": "Nitrogen oxide (NOx) Emission per population (kg)", "type": "quantitative"},
+          {
+            "field": "Nitrogen oxide (NOx) Emission per population (kg)",
+            "type": "quantitative",
+            "format": ".2f"
+          }
+        ]
+      }
+    }
+  ]
+}
