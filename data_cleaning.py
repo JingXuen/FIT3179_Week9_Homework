@@ -13,7 +13,9 @@ merged_df = pd.merge(filtered_df_population, filtered_df_air_pollutants, on=['Ye
 
 # Replace "United States" with "United States of America" in the 'Entity' column
 merged_df['Entity'] = merged_df['Entity'].replace('United States', 'United States of America')
-merged_df['Entity'] = merged_df['Entity'].replace('Congo', 'Democratic Republic of the Congo')
+merged_df['Entity'] = merged_df['Entity'].replace('Democratic Republic of the Congo', 'Dem. Rep. Congo')
+merged_df['Entity'] = merged_df['Entity'].replace('South Sudan', 'S. Sudan')
+merged_df['Entity'] = merged_df['Entity'].replace('Central African Republic', 'Central African Rep.')
 
 # Calculate Nitrogen oxide (NOx) per population and add new column
 merged_df['Nitrogen oxide (NOx) per population (kg)'] = (merged_df['Nitrogen oxide (NOx)'] / merged_df['Population (historical)']) * 1000
